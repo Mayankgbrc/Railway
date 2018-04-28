@@ -127,13 +127,14 @@
     <body>
         <form method="get" >
             <div class="search-box">
-                <input type="text" autocomplete="off" placeholder="Search country..."  name="ocity"/>
+                <input type="text" autocomplete="off" placeholder="Search city..."  name="ocity"/>
                 <div class="result"></div>
             </div>
             <div class="search-box2">
-                <input type="text" autocomplete="off" placeholder="Search country..." name="dcity"/>
+                <input type="text" autocomplete="off" placeholder="Search city..." name="dcity"/>
                 <div class="result2"></div>
             </div>
+            <input type="date" name="date" />
             <button type="submit">Submit</button>
         </form>
         <?php
@@ -141,9 +142,11 @@
             $conn = new mysqli("localhost","root","","rail");
             $ocity = $_GET['ocity'];
             $dcity = $_GET['dcity'];
+            $date = $_GET['date'];
             $ol = stripos($ocity," ");
             $dl = stripos($dcity," ");
             $ocode =  substr($ocity,0,$ol);
+          
             echo "<br>Your origin Station is <b>".$ocode;
             $dcode =  substr($dcity,0,$dl);
             echo "</b> and destination is <b>".$dcode."</b><br><br>";
@@ -156,6 +159,7 @@
             echo "<table border=2><tr><th>Train No</th><th>Train Name</th><th>Origin Stn</th><th>Destination</th><th>Arrival Time</th><th>Departure Time</th><th>Distance</th><th>Availability</th></tr>";
             while($row = mysqli_fetch_assoc($result)){
                 $distance = $row['Distance'] - $d1; 
+                
                 if(($row['Train_No'] == $t_no) && ($row['Station_Code'] == $dcode) ){
                     echo "<tr><td>".$row['Train_No']."</td><td>".$row['Train_Name']."</td><td>".$origin."</td><td>".$row['Station_Code']."</td><td>".$atime."</td><td>".$row['Arrival_time']."</td><td>".$distance."</td>
                         <td> 1AC 2AC 3AC SL "; 
@@ -170,7 +174,7 @@
                             <input type="hidden" value="<?php echo $atime; ?>" name="ATime" />
                             <input type="hidden" value="<?php echo $row['Arrival_time']; ?>" name="DTime" />
                             <input type="hidden" value="<?php echo $distance; ?>" name="distance" />
-
+                            <input type="hidden" value="<?php echo $date; ?>" name="date" />
                             <button>Check Availability</button>
                         </form></td></tr>
                     
@@ -192,19 +196,21 @@
         }
         if(isset($_GET['TNo'])){
             echo "<br><br>You queried for ".$_GET['TNo'];
+            $Tno = $_GET['TNo'];
             echo ". Train Name is ".$_GET['TName'];
-            echo ". Your origin is ";
-            echo $_GET['origin'];
-            echo ".And your destination is ";
-            echo $_GET['destination'];
-            echo ". Departure Time of the train is ";
-            echo $_GET['ATime'];
-            echo ". Arrival Time of train is ";
-            echo $_GET['DTime'];
-            echo ". Total Distance is ";
-            echo $_GET['distance']."km.<br><br>";
+            $Tname = $_GET['TName'];
+            echo ". Your origin is ". $_GET['origin'];
+            $origin = $_GET['origin'];
+            echo ".And your destination is ".$_GET['destination'];
+            $destination = $_GET['destination'];
+            echo ". Departure Time of the train is ".$_GET['ATime'];
+            $arrival_time = $_GET['ATime'];
+            echo ". Arrival Time of train is ".$_GET['DTime'];
+            $departure_time = $_GET['DTime'];
+            echo ". Total Distance is ".$_GET['distance']."km. on ";
+            echo $date."<br><br>";
             $distance = $_GET['distance'];
-
+            $date = $_GET['date'];
             $sql3 = "SELECT * FROM fares WHERE '$distance' BETWEEN R1 AND R2";
             $result3 = mysqli_query($conn,$sql3);
             echo "Fare of the Train<br>";
@@ -218,7 +224,72 @@
                 $tac3 = ceil(($row3['AC3'] + 40 + round(((0.05)*($row3['AC3'] + 40))))/5)*5;
                 $tsl = ceil(($row3['SL'] + 20)/5)*5;
 
-                echo "<tr><td>Total fare </td><td>".$tac1."</td><td>".$tac2."</td><td>".$tac3."</td><td>".$tsl."</td></tr>";
+                echo "<tr><td>Total fare </td><td>".$tac1;
+                ?>
+                <form method="post" action="2.php">
+                    <input type="hidden" name="Tno" value="<?php echo $Tno; ?>" />
+                    <input type="hidden" name="Tname" value="<?php echo $Tname; ?>" />
+                    <input type="hidden" name="Origin" value="<?php echo $origin; ?>" />
+                    <input type="hidden" name="Arrival_Time" value="<?php echo $arrival_time; ?>" />
+                    <input type="hidden" name="Destination" value="<?php echo $destination; ?>" />
+                    <input type="hidden" name="Departure_Time" value="<?php echo $departure_time; ?>" />
+                    <input type="hidden" name="Distance" value="<?php echo $distance; ?>" />
+                    <input type="hidden" name="Train_type" value="AC1" />
+                    <input type="hidden" name="Total_fare" value="<?php echo $tac1; ?>" />
+                    <input type="hidden" name="Date" value="<?php echo $date ?>" />
+                    <button type="submit"> Book Now </button>
+                </form>
+                <?php
+                echo "</td><td>".$tac2;
+                ?>
+
+                <form method="post" action="2.php">
+                    <input type="hidden" name="Tno" value="<?php echo $Tno; ?>" />
+                    <input type="hidden" name="Tname" value="<?php echo $Tname; ?>" />
+                    <input type="hidden" name="Origin" value="<?php echo $origin; ?>" />
+                    <input type="hidden" name="Arrival_Time" value="<?php echo $arrival_time; ?>" />
+                    <input type="hidden" name="Destination" value="<?php echo $destination; ?>" />
+                    <input type="hidden" name="Departure_Time" value="<?php echo $departure_time; ?>" />
+                    <input type="hidden" name="Distance" value="<?php echo $distance; ?>" />
+                    <input type="hidden" name="Train_type" value="AC2" />
+                    <input type="hidden" name="Total_fare" value="<?php echo $tac2; ?>" />
+                    <input type="hidden" name="Date" value="<?php echo $date ?>" />
+                    <button type="submit"> Book Now </button>
+                </form>
+                <?php
+                echo "</td><td>".$tac3;
+                ?>
+                <form method="post" action="2.php">
+                    <input type="hidden" name="Tno" value="<?php echo $Tno; ?>" />
+                    <input type="hidden" name="Tname" value="<?php echo $Tname; ?>" />
+                    <input type="hidden" name="Origin" value="<?php echo $origin; ?>" />
+                    <input type="hidden" name="Arrival_Time" value="<?php echo $arrival_time; ?>" />
+                    <input type="hidden" name="Destination" value="<?php echo $destination; ?>" />
+                    <input type="hidden" name="Departure_Time" value="<?php echo $departure_time; ?>" />
+                    <input type="hidden" name="Distance" value="<?php echo $distance; ?>" />
+                    <input type="hidden" name="Train_type" value="AC3" />
+                    <input type="hidden" name="Total_fare" value="<?php echo $tac3; ?>" />
+                    <input type="hidden" name="Date" value="<?php echo $date ?>" />
+                    <button type="submit"> Book Now </button>
+                </form>
+                <?php
+                echo "</td><td>".$tsl;
+                ?>
+                <form method="post" action="2.php">
+                    <input type="hidden" name="Tno" value="<?php echo $Tno; ?>" />
+                    <input type="hidden" name="Tname" value="<?php echo $Tname; ?>" />
+                    <input type="hidden" name="Origin" value="<?php echo $origin; ?>" />
+                    <input type="hidden" name="Arrival_Time" value="<?php echo $arrival_time; ?>" />
+                    <input type="hidden" name="Destination" value="<?php echo $destination; ?>" />
+                    <input type="hidden" name="Departure_Time" value="<?php echo $departure_time; ?>" />
+                    <input type="hidden" name="Distance" value="<?php echo $distance; ?>" />
+                    <input type="hidden" name="Train_type" value="Sleeper" />
+                    <input type="hidden" name="Total_fare" value="<?php echo $tsl; ?>" />
+                    <input type="hidden" name="Date" value="<?php echo $date ?>" />
+                    <button type="submit"> Book Now </button>
+                </form>
+                <?php
+                echo "</td></tr>";
             }
             echo "</table>";
         }
