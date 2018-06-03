@@ -57,7 +57,7 @@ for($i=1;$i<=4;$i++){
 	}
 
 ?>
-<button type="submit"> Proceed to Payment</button>
+<button type="submit"> Proceed to Payment </button>
 </form>
 <?php
 }

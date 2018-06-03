@@ -249,7 +249,7 @@
                 }
                 echo "<tr><td>Total fare <span style='font-size:12px;'><br>(Rounding off to next multiple of Rs. 5)</span></td><td>".$tac1;
                 ?>
-                <form method="post" action="2.php">
+                <form method="post" action="entry.php">
                     <input type="hidden" name="Tno" value="<?php echo $Tno; ?>" />
                     <input type="hidden" name="Tname" value="<?php echo $Tname; ?>" />
                     <input type="hidden" name="Origin" value="<?php echo $origin; ?>" />
@@ -279,7 +279,7 @@
                 echo "</td><td>".$tac2;
                 ?>
 
-                <form method="post" action="2.php">
+                <form method="post" action="entry.php">
                     <input type="hidden" name="Tno" value="<?php echo $Tno; ?>" />
                     <input type="hidden" name="Tname" value="<?php echo $Tname; ?>" />
                     <input type="hidden" name="Origin" value="<?php echo $origin; ?>" />
@@ -308,7 +308,7 @@
                 <?php
                 echo "</td><td>".$tac3;
                 ?>
-                <form method="post" action="2.php">
+                <form method="post" action="entry.php">
                     <input type="hidden" name="Tno" value="<?php echo $Tno; ?>" />
                     <input type="hidden" name="Tname" value="<?php echo $Tname; ?>" />
                     <input type="hidden" name="Origin" value="<?php echo $origin; ?>" />
@@ -337,7 +337,7 @@
                 <?php
                 echo "</td><td>".$tsl;
                 ?>
-                <form method="post" action="2.php">
+                <form method="post" action="entry.php">
                     <input type="hidden" name="Tno" value="<?php echo $Tno; ?>" />
                     <input type="hidden" name="Tname" value="<?php echo $Tname; ?>" />
                     <input type="hidden" name="Origin" value="<?php echo $origin; ?>" />
